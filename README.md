@@ -1,6 +1,6 @@
 # Overview
 
-This is a python implementation of the Selective Search [[1]](#selective_search_ijcv)[[2]](#selective_search_iccv).
+This is a python implementation of Selective Search [[1]](#selective_search_ijcv)[[2]](#selective_search_iccv). It is forked from [belltailjp/selective_search.py](https://github.com/belltailjp/selective_search_py) to backport it from Python 3 to Python 2.7.
 
 The Selective Search is used as a preprocess of object detection/recognition pipeline.<br/>
 It finds regions likely to contain any objects from an input image regardless of its scale and location,
@@ -19,20 +19,21 @@ This implementation is based on the journal edition of the original paper, and g
 
 # Requirements
 
-* CMake (>= 2.8)
+* CMake (>= 3.3.2)
 * GCC (>= 4.8.2)
-* Python (>= 3.4.3)
+* Python 2.7
     * For required packages, see `requirements.txt`
 * Boost (>= 1.58.0) built with python support
+    * If you get errors building the C++ for selective_search on Mac OS X you should install boost and boost-python via [brew](http://brew.sh/), compile them from source, and have them generate universal binaries:
+      * `brew install --universal --build-from-source -vd boost`
+      * `brew install --universal --build-from-source -vd boost-python`
 * [Boost.NumPy](https://github.com/ndarray/Boost.NumPy)
-    * If you got an error to build, see [belltailjp/Boost.NumPy](https://github.com/belltailjp/Boost.NumPy))
-
-In addition, this is only tested on x64 Linux environment.
+    * If you got an error building on Linux, see [belltailjp/Boost.NumPy](https://github.com/belltailjp/Boost.NumPy)); if you got an error building on Mac OS X, you probably need to generate a universal binary, see [https://github.com/BradNeuberg/Boost.NumPy])(https://github.com/BradNeuberg/Boost.NumPy) for a Mac OS X-specific fork of Boost.Numpy based on cmake.
 
 
 # Preparation
 
-This implementation contains a few C++ code which wraps the Efficient Graph-Based Image Segmentation [[4]](#segmentation) used for generating an initial value.
+This implementation contains some C++ code which wraps the Efficient Graph-Based Image Segmentation [[4]](#segmentation) tool used for generating an initial value.
 It works as a python module, so build it first.
 
 ```sh
@@ -43,8 +44,8 @@ It works as a python module, so build it first.
 % make
 ```
 
-Then you will see a shared object `segment.so` in the directory.
-Keep it on the same directory of main Python script, or referrable location described in `LD_LIBRARY_PATH`.
+Then you will see a shared object `segment.so` in the directory. If you are on Mac OS X you will see `segment.dylib` -- you must manually move this over to be `segment.so` to work correctly.
+Keep it on the same directory of main Python script, or referrable location described in `LD_LIBRARY_PATH` on Linux or `DYLD_FALLBACK_LIBRARY_PATH` on Mac OS X.
 
 
 # Demo
@@ -54,7 +55,7 @@ Keep it on the same directory of main Python script, or referrable location desc
 *showcandidate* demo allows you to interactively see the result of selective search.
 
 ```sh
-% ./demo_showcandidates.py image.jpg
+% ./demo_showcandidates.py --image image.jpg
 ```
 
 ![showcandidate GUI example](doc/showcandidates_scr.png)
@@ -84,7 +85,7 @@ If you want to see labels composited with the input image, give a particular alp
 % ./demo_showhierarchy.py image.jpg --k 500 --feature color texture --color rgb --alpha 0.6
 ```
 
-![image heerarchy with original image](doc/hierarchy_example_composited.png)
+![image hierarchy with original image](doc/hierarchy_example_composited.png)
 
 
 # Implementation
@@ -105,7 +106,7 @@ For diversification strategy, this implementation supports to vary the following
 You can give any combinations for each strategy.
 
 
-## How to integrate to your code
+## How to integrate into your code
 
 If you just want to use this implementation as a black box, only the `selective_search` module is necessary to import.
 

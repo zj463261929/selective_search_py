@@ -12,7 +12,7 @@ class TestColorSpace:
         assert 0 <= numpy.min(img)
         assert 1 < numpy.max(img) <= 255
 
-    def setup_method(self, method):
+    def setUp(self):
         self.I = numpy.ndarray((10, 10, 3), dtype=numpy.uint8)
         self.I[:, :, 0] = 50
         self.I[:, :, 1] = 100

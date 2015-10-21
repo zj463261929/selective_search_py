@@ -29,7 +29,7 @@ class Demo(QWidget):
     regions = list()
 
     def __init__(self, ndimg):
-        super().__init__()
+        super(Demo, self).__init__()
         self.ndimg = ndimg
         h, w = ndimg.shape[:2]
         self.qimg = QImage(ndimg.flatten(), w, h, QImage.Format_RGB888)

@@ -52,8 +52,8 @@ if __name__=="__main__":
         result = (result * args.alpha + img * (1. - args.alpha)).astype(numpy.uint8)
         fn = "%s_%04d.png" % (args.output, depth)
         skimage.io.imsave(fn, result)
-        print('.', end="")
+        sys.stdout.write('.')
         sys.stdout.flush()
 
-    print()
+    print('\n')
 

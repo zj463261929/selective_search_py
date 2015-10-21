@@ -8,7 +8,7 @@ import numpy
 import selective_search
 
 class TestCalcAdjecencyMatrix:
-    def setup_method(self, method):
+    def setUp(self):
         self.label = numpy.zeros((4, 4), dtype=int)
 
     def test_only_1_segment(self):
@@ -106,7 +106,7 @@ class TestCalcAdjecencyMatrix:
         assert set(numpy.flatnonzero(adj_mat[ 0])) == { 0,  1,  4}
         assert set(numpy.flatnonzero(adj_mat[ 1])) == { 0,  1,  2,  5}
         assert set(numpy.flatnonzero(adj_mat[ 2])) == { 1,  2,  3,  6}
-        assert set(numpy.flatnonzero(adj_mat[ 3])) == { 2,  3,  7} 
+        assert set(numpy.flatnonzero(adj_mat[ 3])) == { 2,  3,  7}
         assert set(numpy.flatnonzero(adj_mat[ 4])) == { 0,  4,  5,  8}
         assert set(numpy.flatnonzero(adj_mat[ 5])) == { 1,  4,  5,  6,  9}
         assert set(numpy.flatnonzero(adj_mat[ 6])) == { 2,  5,  6,  7, 10}
@@ -114,7 +114,7 @@ class TestCalcAdjecencyMatrix:
         assert set(numpy.flatnonzero(adj_mat[ 8])) == { 4,  8,  9, 12}
         assert set(numpy.flatnonzero(adj_mat[ 9])) == { 5,  8,  9, 10, 13}
         assert set(numpy.flatnonzero(adj_mat[10])) == { 6,  9, 10, 11, 14}
-        assert set(numpy.flatnonzero(adj_mat[11])) == { 7, 10, 11, 15} 
+        assert set(numpy.flatnonzero(adj_mat[11])) == { 7, 10, 11, 15}
         assert set(numpy.flatnonzero(adj_mat[12])) == { 8, 12, 13}
         assert set(numpy.flatnonzero(adj_mat[13])) == { 9, 12, 13, 14}
         assert set(numpy.flatnonzero(adj_mat[14])) == {10, 13, 14, 15}
@@ -125,7 +125,7 @@ class TestCalcAdjecencyMatrix:
 
 
 class TestNewAdjacencyDict:
-    def setup_method(self, method):
+    def setUp(self):
         # from:
         #   000000
         #   122334
@@ -167,7 +167,7 @@ class TestNewAdjacencyDict:
 
 
 class TestNewLabel:
-    def setup_method(self, method):
+    def setUp(self):
         self.L  = numpy.array([[0, 0, 0, 0, 0, 0],\
                                [1, 2, 2, 3, 3, 4],\
                                [1, 2, 2, 3, 3, 4],\
@@ -188,7 +188,7 @@ class TestNewLabel:
 
 
 class TestBuildInitialSimilaritySet:
-    def setup_method(self, method):
+    def setUp(self):
         class stub_feature_extractor:
             def similarity(self, i, j):
                 return i + j    # Dummy similarity.
@@ -215,7 +215,7 @@ class TestBuildInitialSimilaritySet:
         assert S == expected
 
 class TestMergeSimilaritySet:
-    def setup_method(self, method):
+    def setUp(self):
         # 0011  =>  0011
         # 2233  =>  4444
         # (i, j, t) = (2, 3, 4)
@@ -231,7 +231,11 @@ class TestMergeSimilaritySet:
                    1: {0, 4},\
                    4: {0, 1}}
 
-        self.extractor = type('Feature', (), {'similarity' : (lambda i, j: i + j)})
+        class MockFeature:
+            def similarity(self, i, j):
+                return i + j
+
+        self.extractor = MockFeature()
 
     def test_value(self):
         S_ = selective_search._merge_similarity_set(self.extractor, self.Ak, self.S, 2, 3, 4)
