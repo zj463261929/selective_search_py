@@ -136,12 +136,12 @@ regions = selective_search(img, \
 
 ## Test
 
-This implementation contains automated unit tests using PyTest.
+This implementation contains automated unit tests using [Nose](https://nose.readthedocs.org/en/latest/).
 
-To execute full test, type:
+To execute the full tests, type:
 
 ```sh
-% py.test
+% nosetests
 ```
 
 
