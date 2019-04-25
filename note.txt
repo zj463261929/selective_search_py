@@ -1,0 +1,9 @@
+安装Boost-Numpy
+   sudo apt -y install libpython2.7-dev libboost-python-dev 
+   git clone https://github.com/belltailjp/Boost.NumPy 
+   cd Boost.Numpy 
+   mkdir build 
+   cd build 
+   cmake .. 
+   make 
+   make install
